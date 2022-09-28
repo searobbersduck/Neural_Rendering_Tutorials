@@ -4,7 +4,7 @@
 
 首先，正文的第一张图。
 
-![f1-abstract](.\images\f1-abstract.JPG)
+![f1-abstract](./images/f1-abstract.JPG)
 
 这张图说了什么内容呢？
 
@@ -15,6 +15,6 @@
 所以看了这张图之后，我们就也能了解到本文的局限性了，很难具体应用到实际的生产实践当中，那么接下来就简单的介绍下本文的方法思路。
 
 
-![](.\images\f2-problem-definition.JPG)
+![f2-problem-definition](./images/f2-problem-definition.JPG)
 
 
