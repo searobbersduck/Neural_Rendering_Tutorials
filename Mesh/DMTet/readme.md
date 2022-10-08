@@ -10,6 +10,6 @@ github:
 
 ## s
 
-<video id="video" controls="" preload="none" poster="封面">
-      <source id="mp4" src="https://nv-tlabs.github.io/GET3D/assets/teaser-rotate.mp4" type="video/mp4">
-</videos>
+<video width="720" height="303" controls>
+<source src="https://nv-tlabs.github.io/GET3D/assets/teaser-rotate.mp4" type="video/mp4">
+</video>
