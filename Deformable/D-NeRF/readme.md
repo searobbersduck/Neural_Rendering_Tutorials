@@ -1,5 +1,7 @@
 # D-NeRF: Neural Radiance Fields for Dynamic Scenes
 
+大家好，今天给大家介绍Neural Rendering中NeRF的一个方向——deformable场景，也就是可形变场景的重建。这篇文章叫D-NeRF,文章的内容比较简单，并且实用性也不高。但是为了让大家更多的了解deformable场景重建这个方向，这里还是给大家简单介绍一下。
+
 这篇文章是2020年的一篇文章，这里只是简单的做个介绍。主要从几张图来看这篇文章。
 
 <br><br>
