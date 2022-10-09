@@ -69,4 +69,4 @@ GET3D 能够生成具有任意拓扑、高质量几何和纹理的各种形状�
 
 <br>
 
-<>
+> In each row, we show shapes generated from the same geometry latent code, while changing the texture latent code. In each column, we show shapes generated from the same texture latent code, while changing the geometry code. Our model achieves a good disentanglement between geometry and texture.
