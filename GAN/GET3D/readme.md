@@ -1,6 +1,6 @@
 # GET3D
 
-大家好今天来给大家讲解一篇文章Get 3D ，这篇文章的全称是 A generative model of High quality 3D textured shapes learned from images 。这篇文章是发表在new IPS twenty twenty two的一篇文章 。文章的作者主要来自英伟达团队 。
+大家好今天来给大家讲解一篇文章Get 3D ，这篇文章的全称是 A generative model of High quality 3D textured shapes learned from images 。从图像中学习的高质量的带纹理的3D形状的生成模型，这篇文章是发表在NeurIPS 2022的一篇文章 。文章的作者主要来自英伟达团队 。
 
 ## Abstract
 
@@ -48,4 +48,28 @@
 
 ### 3D-Aware Generative Image Synthesis
 
-这一部分
+这一部分列举了之前带有3D一致的生成式图像合成方法的局限：
+* 神经体绘制网络通常查询速度很慢，导致训练时间长，并生成分辨率有限的图像。
+*  GIRAFFE 和 StyleNerf 通过以较低分辨率执行神经渲染，然后使用 2D CNN 对结果进行上采样，提高了训练和渲染效率。 然而，性能提升是以降低多视图一致性为代价的。
+*  EG3D 可以部分缓解这个问题。 然而，从基于神经渲染的方法中提取纹理表面并非易事。
+*  相比之下，GET3D 直接输出可在标准图形引擎中轻松使用的纹理 3D 网格。
+
+
+<br><br>
+## Method
+
+方法部分的总体结构如下所示：
+
+* Generative Model of 3D Textured Meshes
+  * Geometry Generator
+    * Network Architecture
+    * Differentiable Mesh Extraction
+  * Texture Generator
+    * Network Architecture
+* Differentiable Rendering and Training
+  * Differentiable Rendering
+  * Discriminator & Objective
+  * Regularization
+
+### Generative Model of 3D Textured Meshes
+

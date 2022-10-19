@@ -44,14 +44,6 @@ DMTet的这种组合方式，允许对表面几何、拓扑结构以及细分层
 
 
 
+### 视频讲解
 
-
-## s
-
-<video width="720" height="303" controls>
-<source src="https://nv-tlabs.github.io/GET3D/assets/teaser-rotate.mp4" type="video/mp4">
-</video>
-
-<video id="video" controls="" preload="none" poster="封面">
-      <source id="mp4" src="https://nv-tlabs.github.io/GET3D/assets/teaser-rotate.mp4" type="video/mp4">
-</videos>
+[]()
