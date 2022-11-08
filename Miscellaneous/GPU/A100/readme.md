@@ -58,4 +58,13 @@
 
 * tf32 vs fp32
   * [TensorFloat-32 in the A100 GPU Accelerates AI Training, HPC up to 20x](https://blogs.nvidia.com/blog/2020/05/14/tensorfloat-32-precision-format/)
-    * 
+
+
+
+<br>
+
+* Fine grained structured sparsity  是什么?
+  * [细粒度结构化稀疏剪枝(Fine-grained Structural Sparse Pruning)](https://zhuanlan.zhihu.com/p/381279197)
+    * 以Nvidia A100 GPU为例子，通过新的2：4稀疏矩阵，即每4个连续权重中允许两个非零值。由于矩阵的定义明确，一来可以对其进行有效压缩，将内存存储量和带宽减少近2倍。二来因为保存了非零值权重索引，所以只需要计算非零值的乘累加，计算速度加倍。
+    * 如下图，Sparse Tensor Core通过indices挑选对应的acts与weights进行乘累加运算，实现计算加速。
+    * ![](./images/fine_grained_structured_sparsity_arch.JPG)
