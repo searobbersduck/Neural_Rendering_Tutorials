@@ -58,6 +58,18 @@
 
 * tf32 vs fp32
   * [TensorFloat-32 in the A100 GPU Accelerates AI Training, HPC up to 20x](https://blogs.nvidia.com/blog/2020/05/14/tensorfloat-32-precision-format/)
+    * TF32 running on Tensor Cores in A100 GPUs can provide up to 10x speedups compared to single-precision floating-point math (FP32) on Volta GPUs.
+    * Combining TF32 with structured sparsity on the A100 enables performance gains over Volta of up to 20x.
+    * Math formats are like rulers. The number of bits in a format’s exponent determines its range, how large an object it can measure. Its precision — how fine the lines are on the ruler — comes from the number of bits used for its mantissa, the part of a floating point number after the radix or decimal point.
+    * A good format strikes a balance. It should use enough bits to deliver precision without using so many it slows processing and bloats memory.
+    * TF32 uses the same 10-bit mantissa as the half-precision (FP16) math, shown to have more than sufficient margin for the precision requirements of AI workloads. And TF32 adopts the same 8-bit exponent as FP32 so it can support the same numeric range.
+    * The combination makes TF32 a great alternative to FP32 for crunching through single-precision math, specifically the massive multiply-accumulate functions at the heart of deep learning and many HPC apps.
+    * ![](./images/bf16_arch.JPG)
+    * HPC apps called linear solvers — algorithms with repetitive matrix-math calculations — also will benefit from TF32. They’re used in a wide range of fields such as earth science, fluid dynamics, healthcare, material science and nuclear energy as well as oil and gas exploration.
+  * [Using Tensor Cores for Mixed-Precision Scientific Computing](https://developer.nvidia.com/blog/tensor-cores-mixed-precision-scientific-computing/)
+  * [How Sparsity Adds Umph to AI Inference](https://blogs.nvidia.com/blog/2020/05/14/sparsity-ai-inference/)
+  * [What’s the Difference Between Single-, Double-, Multi- and Mixed-Precision Computing?](https://blogs.nvidia.com/blog/2019/11/15/whats-the-difference-between-single-double-multi-and-mixed-precision-computing/)
+  * 
 
 
 
@@ -68,3 +80,53 @@
     * 以Nvidia A100 GPU为例子，通过新的2：4稀疏矩阵，即每4个连续权重中允许两个非零值。由于矩阵的定义明确，一来可以对其进行有效压缩，将内存存储量和带宽减少近2倍。二来因为保存了非零值权重索引，所以只需要计算非零值的乘累加，计算速度加倍。
     * 如下图，Sparse Tensor Core通过indices挑选对应的acts与weights进行乘累加运算，实现计算加速。
     * ![](./images/fine_grained_structured_sparsity_arch.JPG)
+
+
+<br> 
+
+* GPU的缓存机制？
+  * [Understanding GPU caches](https://www.rastergrid.com/blog/gpu-tech/2021/01/understanding-gpu-caches/)
+  * 
+
+
+<br>
+
+* Magnum IO是什么？
+  * [NVIDIA Magnum IO——数据中心 IO 加速平台](https://www.nvidia.cn/data-center/magnum-io/)
+    * 加速计算将计算速度提高了百万倍，使数据中心逐步演变为 AI 工厂。然而，加速计算需要加速 IO。NVIDIA Magnum IO™ 架构为并行智能数据中心 IO 而设计。该架构最大限度地提升存储、网络、多节点和多GPU通讯性能，为大型语言模型、推荐系统、成像、仿真和科学研究等全球重要的应用优化实现加速。
+
+
+<br>
+
+* Ampere架构中的Task Graph是什么？
+  * [英伟达A100 Tensor Core GPU架构深度讲解](https://blog.51cto.com/u_15726357/5734490)
+    * CUDA Task graph为向GPU提交工作提供了一个更有效的模型。Task graph由一系列操作组成，如内存拷贝和内核启动，这些操作通过依赖关系连接起来。Task graph允许定义一次并重复运行执行流。预定义的Task graph允许在单个操作中启动任意数量的内核，极大地提高了应用程序的效率和性能。A100增加了新的硬件特性，使Task graph中网格之间的路径明显更快。
+    * <font color='red'>这篇blog中对每一项新特性都简短的进行了描述，可以作为ppt的备注参考</font>
+
+<br>
+
+* DMMA是什么？
+  * [双精度张量内核加快了高性能计算](https://www.cnblogs.com/wujianming-110117/p/14211200.html)
+    * 用户可以调用新的CUDA-X库来访问A100中的FP64加速。这些GPU内置了支持DMMA的第三代Tensor内核，DMMA是一种新模式，可加速双精度矩阵乘法累加运算。
+    * 单个DMMA作业使用一条计算机指令来代替八条传统的FP64指令。结果，A100的FP64数学运算速度比其它芯片更快，工作量更少，不仅节省了时间和功耗，而且还节省了宝贵的内存和I / O带宽。
+
+<br>
+
+* Transformer Engine
+  * [简单读读TransformerEngine](https://zhuanlan.zhihu.com/p/576002611)
+    * 这其实就是PyTorch的一个拓展，为了利用FP8的特性，针对Transformer里面的Kernel进行了重写，包含了一系列LayerNorm, GeLU, ScaledSoftmax等。
+    * 使用方式也是比较简单，使用该拓展额外包的一层Module来搭建网络，即可，最后再包一层混合精度训练作用域
+    * 在FP16下，其数据范围还是足够大的，因此在AMP下，我们只在最后的Loss做了一个scaling，这个步骤足以保证在整个模型运算过程中不会产生溢出
+    * 而FP8相比FP16减少了更多有效位，因此不能简单地复用FP16下的策略，需要给每个FP8 Tensor单独设置一个合适的scale factor。Transformer Engine 需要动态地对输入范围进行调整
+    * 这是这篇blog的总结：大致浏览完其实思路不复杂，但感觉还是FP8技术的不稳定，整个项目还是加入了很多限制。得益于PyTorch灵活的外部扩展形式，只要不去触碰框架底层运行机制，仅仅在算子层面上的修改还是相当简单。虽然不具备通用性，但是运算主体就这几个算子，为了性能也是可以接受的
+  * [全新 Hopper 架构的Transformer 引擎有什么特点？](https://blog.csdn.net/kunhe0512/article/details/125063063)
+    * Transformer 引擎采用软件和自定义 NVIDIA Hopper Tensor Core 技术，该技术旨在加速训练基于常见 AI 模型构建模块（即 Transformer）构建的模型。这些 Tensor Core 能够应用 FP8 和 FP16 混合精度，以大幅加速 Transformer 模型的 AI 计算。采用 FP8 的 Tensor Core 运算在吞吐量方面是 16 位运算的两倍。
+    * 模型面临的挑战是智能管理精度以保持准确性，同时获得更小、更快数值格式所能实现的性能。Transformer 引擎利用定制的、经NVIDIA调优的启发式算法来解决上述挑战，该算法可在 FP8 与 FP16 计算之间动态选择，并自动处理每层中这些精度之间的重新投射和缩放。
+    * Transformer Engine 使用每层统计分析来确定模型每一层的最佳精度（FP16 或 FP8），在保持模型精度的同时实现最佳性能。
+  
+
+  <br>
+
+  * 混精度训练中的scale是什么？
+    * [混合精度训练原理总结](https://blog.csdn.net/qq_29462849/article/details/121804944)
+      * 这一部分要再重点看一下
