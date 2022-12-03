@@ -125,8 +125,31 @@
     * Transformer Engine 使用每层统计分析来确定模型每一层的最佳精度（FP16 或 FP8），在保持模型精度的同时实现最佳性能。
   
 
-  <br>
+<br>
 
-  * 混精度训练中的scale是什么？
-    * [混合精度训练原理总结](https://blog.csdn.net/qq_29462849/article/details/121804944)
-      * 这一部分要再重点看一下
+* 混精度训练中的scale是什么？
+  * [混合精度训练原理总结](https://blog.csdn.net/qq_29462849/article/details/121804944)
+    * 这一部分要再重点看一下
+
+<br>
+
+* gpu local memory 和 global memory 的区别?
+  * [GPU存储结构概述（及与Shader关系猜想）](https://zhuanlan.zhihu.com/p/108019839)
+    * Local Memory本身在硬件中没有特定的存储单元，而是从Global Memory虚拟出来的地址空间。Local Memory是为寄存器无法满足存储需求的情况而设计的，主要是用于存放单线程的大型数组和变量。Local Memory是线程私有的，线程之间是不可见的。由于GPU硬件单位没有Local Memory的存储单元，所以，针对它的访问是比较慢的。从上面的表格中，也可以看到跟Global Memory的访问速度是接近的。
+    * Shared Memory位于GPU芯片上，访问延迟仅次于寄存器。Shared Memory是可以被一个Block中的所有Thread来进行访问的，可以实现Block内的线程间的低开销通信。在SMX中，L1 Cache跟Shared Memory是共享一个64KB的告诉存储单元的，他们之间的大小划分不同的GPU结构不太一样；
+    * <font color='red'>内容可以再重点看一下</font>
+  * [一段代码搞懂 gpu memory](https://blog.csdn.net/u012436149/article/details/77221417)
+    * local memory: 线程私有，只能本线程访问
+    * shared memory: 线程块(thread block) 共享, 同一个线程块中的线程可以访问
+    * global memory: 所有线程都可访问
+
+
+* NVJPG???
+  * [Leveraging the Hardware JPEG Decoder and NVIDIA nvJPEG Library on NVIDIA A100 GPUs](https://developer.nvidia.com/blog/leveraging-hardware-jpeg-decoder-and-nvjpeg-on-a100/)
+  
+
+* NVDEC
+  * [NVIDIA FFmpeg Transcoding Guide](https://developer.nvidia.com/blog/nvidia-ffmpeg-transcoding-guide/)
+  * [NVIDIA Video Codec SDK](https://developer.nvidia.com/nvidia-video-codec-sdk)
+
+
