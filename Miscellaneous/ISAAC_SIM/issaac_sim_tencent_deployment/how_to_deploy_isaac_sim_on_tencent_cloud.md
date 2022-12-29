@@ -1,6 +1,7 @@
 # 如何部署在腾讯云上部署ISAAC SIM
 
-## 登录账户
+<br><br>
+## 1. 登录账户
 
 * 登录腾讯云的主页：[https://www.tencentcloud.com/](https://www.tencentcloud.com/)
 ![](./images/open_tencent_cloud_main_page.JPG)
@@ -20,7 +21,7 @@
 
 
 <br><br>
-## 创建腾讯云示例
+## 2. 创建腾讯云实例
 
 * 在`Products`下拉选项卡中，点击`04 Cloud Virtual Machine`
 ![](./images/create_instance_choose_cloud_virtual_machine.jpg)
@@ -59,7 +60,7 @@
 ![](./images/create_instance_cvm_config_net_basic.JPG)
 ![](./images/create_instance_cvm_config_net_create_vpc.JPG)
 
-* 选择`Security Group`，这一步至关重要；要保证isaac sim远程连接所需要的端口全部开放，这里为了简单，我们选择`Open all ports`，实际操作中，为了保证安全，用户要根据自己的需求，选择对外开放的端口。
+* 选择`Security Group`，这一步至关重要；要保证isaac sim远程连接所需要的端口全部开放，这里为了简单，我们选择`Open all ports`，实际操作中，为了保证安全，用户要根据自己的需求，选择对外开放的端口。<font color='red'>这里要特别注意，我们要保证开发所有`ISAAC SIM`所需要的端口。具体可参见[Using Omniverse Streaming Client](https://docs.omniverse.nvidia.com/app_streaming-client/app_streaming-client/user-manual.html)</font>
 
 ![](./images/create_instance_cvm_config_net_security.JPG)
 ![](./images/create_instance_cvm_config_net_security_create.JPG)
@@ -73,4 +74,4 @@
 
 ![](./images/create_instance_cvm_config_net_confirm.JPG)
 
-#### 
+## 2. 运行实例
