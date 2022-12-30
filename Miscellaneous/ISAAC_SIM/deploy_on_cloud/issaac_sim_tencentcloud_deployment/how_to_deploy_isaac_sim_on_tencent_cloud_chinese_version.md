@@ -79,4 +79,4 @@
 实例已经创建成功，用户可以启动实例，然后通过公网ip访问实例。
 
 <br><br>
-## 如何在云上运行ISAAC SIM，并通过Streaming的方式远程访问，可参照链接：[How to run ISAAC SIM on the cloud and access it remotely through Streaming](../isaac_sim_cloud_run_isaac_sim/isaac_sim_cloud_run_isaac_sim.md)
+## 3. 如何在云上运行ISAAC SIM，并通过Streaming的方式远程访问，可参照链接：[How to run ISAAC SIM on the cloud and access it remotely through Streaming](../isaac_sim_cloud_run_isaac_sim/isaac_sim_cloud_run_isaac_sim.md)
