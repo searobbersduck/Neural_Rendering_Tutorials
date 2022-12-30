@@ -65,7 +65,7 @@ Select `RAM user to log in`
 ![](./images/3.1.run_instance.JPG)
 
 <br><br>
-## 4. How to run ISAAC SIM on the cloud and access it remotely through Streaming, please refer to the link: [How to run ISAAC SIM on the cloud and access it remotely through Streaming](../isaac_sim_cloud_connect/isaac_sim_cloud_run_isaac_sim.md)
+## 4. How to run ISAAC SIM on the cloud and access it remotely through Streaming, please refer to the link: [How to run ISAAC SIM on the cloud and access it remotely through Streaming](../isaac_sim_cloud_run_isaac_sim/isaac_sim_cloud_run_isaac_sim.md)
 
 
 
