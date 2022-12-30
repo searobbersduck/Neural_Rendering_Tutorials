@@ -1,62 +1,72 @@
-# 如何部署在阿里云上部署ISAAC SIM
+# How to deploy ISAAC SIM on Alibaba Cloud
 
 <br><br>
-## 1. 登录账户
+## 1. login account
     
-选择`RAM用户进行登录`
+Select `RAM user to log in`
     
 ![](./images/1.1.login.JPG)
 
 <br><br>
-## 2. 创建阿里云GPU实例
+## 2. Create an Alibaba Cloud GPU instance
 
-1. 如下图所示，点击左上角，选择`云服务器 ECS`，点击`实例`，点击`创建实例`，进入实例创建界面。
+1. As shown in the figure below, click the upper left corner, select `Cloud Server ECS`, click `Instance`, click `Create Instance` to enter the instance creation interface.
 
 ![](./images/2.1.create_instance_entry.gif)
 
 ![](./images/2.2.create_instance_ui.JPG)
 
-2. 创建实例——基础配置
+2. Create an instance - basic configuration
 
-    如下图所示，基础配置（根据需要进行配置）
-    * 选择付费模式
-    * 选择地域及可用区域
-    * 选择实例，这里选择`T4`GPU
-    * 抢占式实例使用时长
-    * 购买实例数量：`1`
-    * 选择镜像：`Ubuntu`，`18.04 64 bit`
-    * 选择存储，云盘大小设置`500G`
-    * 点击下一步，`下一步：网络和安全组 `
+     As shown in the figure below, the basic configuration (configure as needed)
+     * Choose payment mode
+     * Select the region and available area
+     * Select the instance, here select `T4`GPU
+     * The usage time of preemptible instances
+     * Number of purchased instances: `1`
+     * Select image: `Ubuntu`, `18.04 64 bit`
+     * Select storage, and set the cloud disk size to `500G`
+     * Click Next, `Next: Network and Security Groups`
 
     ![](./images/2.2.basic_config.gif)
 
-3. 创建实例——网络和安全组 
-    如下所示，网络和安全组（根据需要进行配置）
-    ![](./images/2.3.network_and_safe.gif)
-    * 选择网络，用户可以选择已有网络，如本例中的`isaac-sim-vpc-sh / vpc-uf6uov4wgyl1ru928mlbk`，也可以创建新的`专有网络`，点击`前往控制台创建>`，即可进行新的`专有网络`创建。
-    * 选择安全组，用户可以选择已有安全组，如本例中的` isaac-sim-open-all-ports / sg-uf6ix68ocmepok99yn2v`，也可以创建新的安全组，点击` 新建安全组>`，即可进行新的`安全组创建`。
-      * 这里要特别注意，我们要保证开发所有`ISAAC SIM`所需要的端口。具体可参见[Using Omniverse Streaming Client](https://docs.omniverse.nvidia.com/app_streaming-client/app_streaming-client/user-manual.html)
-      * ![](./images/2.3.1.streaming_ports.JPG)
-      * 用户可以根据需要开放端口
-      * ![](./images/2.3.2.open_network_ports.JPG)
-    * 点击下一步：`下一步：系统配置`
-4. 创建实例——系统配置
-    如下所示，系统配置（根据需要进行配置）
-    ![](./images/2.4.system_config.gif)
-    * 登录凭证，选择`密钥对`
-    * 登录名，选择`root`
-    * 密钥对，可以选择已有秘钥，或是创建新的秘钥，秘钥为`*.pem`格式的文件
-    * 实例名称
-    * 点击下一步，`下一步：分组设置`
-5. 创建实例——分组配置
-   * 默认设置即可
-   * 点击`确认订单`
-6. 确认订单
-   * 点击`创建实例`
+3. Create Instance - Network and Security Group
+     As shown below, network and security group (configure as needed)
+     ![](./images/2.3.network_and_safe.gif)
+     * Select the network, the user can select an existing network, such as `isaac-sim-vpc-sh / vpc-uf6uov4wgyl1ru928mlbk` in this example, or create a new `VPC`, click `Go to the console to create>`, A new `private network` can be created.
+     * Select a security group, the user can select an existing security group, such as `isaac-sim-open-all-ports/sg-uf6ix68ocmepok99yn2v` in this example, or create a new security group, click `New Security Group>`, You can create a new `Security Group`.
+       * Special attention should be paid here, we must ensure that all ports required by `ISAAC SIM` are developed. For details, see [Using Omniverse Streaming Client](https://docs.omniverse.nvidia.com/app_streaming-client/app_streaming-client/user-manual.html)
+       * ![](./images/2.3.1.streaming_ports.JPG)
+       * Users can open ports as needed
+       * ![](./images/2.3.2.open_network_ports.JPG)
+     * Click Next: `Next: System Configuration`
+  
+4. Create an instance - system configuration
+     As shown below, the system configuration (configure as needed)
+     ![](./images/2.4.system_config.gif)
+     * Login credentials, select `key pair`
+     * Login name, select `root`
+     * Key pair, you can choose an existing key, or create a new key, the key is a file in `*.pem` format
+     * instance name
+     * Click Next, `Next: Group Settings`
+  
+5. Create an instance - group configuration
+    * The default setting is fine
+    * Click `Confirm Order`
+
+
+6. Confirm order
+    * Click `Create instance`
   ![](./images/2.6.create_instance.JPG)
-    
-## 3. 运行实例
-    实例已经创建成功，用户可以启动实例，然后通过公网ip访问实例。
+
+<br><br>   
+## 3. Run the instance
+     The instance has been created successfully, the user can start the instance, and then access the instance through the public network ip.
 ![](./images/3.1.run_instance.JPG)
+
+<br><br>
+## 4. How to run ISAAC SIM on the cloud and access it remotely through Streaming, please refer to the link: [How to run ISAAC SIM on the cloud and access it remotely through Streaming](../isaac_sim_cloud_connect/isaac_sim_cloud_run_isaac_sim.md)
+
+
 
 
