@@ -1,4 +1,4 @@
-# 
+# 如何在云上运行ISAAC SIM，并通过Streaming的方式远程访问
 
 ## 1. SSH Server
 
@@ -45,7 +45,7 @@
 
     ![](./images/2.1.docker_run_isaac_sim.JPG)
 
-2. 在容器内，启动`isaac sim`: `./runheadless.native.sh`
+2. 在容器内，运行`isaac sim`: `./runheadless.native.sh`
    ![](./images/2.2.runheadless.JPG)
 
 3. `isaac sim`启动成功，会显示`Isaac Sim Headless Native App is loaded.`，然后我们可以通过client端的` Omniverse Streaming Client`进行链接，Install and launch the [Omniverse Streaming Client](https://docs.omniverse.nvidia.com/app_streaming-client/app_streaming-client/user-manual.html) from the [Omniverse Launcher](https://docs.omniverse.nvidia.com/prod_launcher/prod_launcher/installing_launcher.html).
