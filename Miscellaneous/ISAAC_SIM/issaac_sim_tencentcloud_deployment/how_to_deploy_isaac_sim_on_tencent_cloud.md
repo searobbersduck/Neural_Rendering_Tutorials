@@ -79,3 +79,6 @@
 ## 4. run instance
 
 The instance has been created successfully, the user can start the instance, and then access the instance through the public network ip.
+
+<br><br>
+## 5. How to run ISAAC SIM on the cloud and access it remotely through Streaming, please refer to the link: [How to run ISAAC SIM on the cloud and access it remotely through Streaming](../isaac_sim_cloud_connect/isaac_sim_cloud_run_isaac_sim.md)
