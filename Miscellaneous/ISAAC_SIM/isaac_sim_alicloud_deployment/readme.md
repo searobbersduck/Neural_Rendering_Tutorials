@@ -56,7 +56,7 @@
   ![](./images/2.6.create_instance.JPG)
     
 ## 3. 运行实例
-    实例已经创建成功，用户可以通过公网ip访问实例。
+    实例已经创建成功，用户可以启动实例，然后通过公网ip访问实例。
 ![](./images/3.1.run_instance.JPG)
 
 

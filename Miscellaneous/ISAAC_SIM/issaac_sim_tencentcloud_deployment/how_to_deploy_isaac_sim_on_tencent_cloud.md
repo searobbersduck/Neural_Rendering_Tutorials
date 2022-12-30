@@ -67,7 +67,7 @@
 ![](./images/create_instance_cvm_config_net_security_config.JPG)
 ![](./images/create_instance_cvm_config_net_security_choose.JPG)
 
-* Other Settings：创建key，以便`ssh`连接使用
+* Other Settings：创建key，以便`ssh`连接使用。可以选择已有秘钥，或是创建新的秘钥，秘钥为`*.pem`格式的文件。
 ![](./images/create_instance_cvm_config_net_create_key.JPG)
 
 * `Config network and host`完成之后，点击`Next: Confirm configuration`
@@ -75,3 +75,5 @@
 ![](./images/create_instance_cvm_config_net_confirm.JPG)
 
 ## 2. 运行实例
+
+实例已经创建成功，用户可以启动实例，然后通过公网ip访问实例。
