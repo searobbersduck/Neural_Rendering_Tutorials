@@ -62,6 +62,6 @@
 ![](./images/3.1.run_instance.JPG)
 
 <br><br>
-## 如何在云上运行ISAAC SIM，并通过Streaming的方式远程访问，可参照链接：[How to run ISAAC SIM on the cloud and access it remotely through Streaming](../isaac_sim_cloud_run_isaac_sim/isaac_sim_cloud_run_isaac_sim.md)
+## 4. 如何在云上运行ISAAC SIM，并通过Streaming的方式远程访问，可参照链接：[How to run ISAAC SIM on the cloud and access it remotely through Streaming](../isaac_sim_cloud_run_isaac_sim/isaac_sim_cloud_run_isaac_sim.md)
 
 
