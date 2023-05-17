@@ -39,26 +39,33 @@ Generating Planar Images ━━━━━━━━━━━━━━━━━━�
 
 <br>
 
+
+## 普通畸变数据处理
+
+```
+ns-process-data images --data /workspace/data/insta360/v7/images/ --output-dir /workspace/data/insta360/v7/processed_images2
+```
+
 ## 训练
 
 ref: [Train and run viewer](https://docs.nerf.studio/en/latest/quickstart/first_nerf.html#train-and-run-viewer)
 
 ```
-ns-train nerfacto --data /workspace/data/insta360/processed_images --viewer.websocket-port 7007
+ns-train instant-ngp --data /workspace/data/insta360/v7/processed_images2/ --viewer.websocket-port 7007
 ```
 
 运行程序如下：
 
 ```
-user@e166cd58a880:/workspace$ ns-train nerfacto --data /workspace/data/insta360/processed_images --viewer.websocket-port 7007
-[08:49:07] Using --data alias for --data.pipeline.datamanager.data                                          train.py:222
+user@e166cd58a880:/workspace$ ns-train instant-ngp --data /workspace/data/insta360/v7/processed_images2/ --viewer.websocket-port 7007
+[10:11:30] Using --data alias for --data.pipeline.datamanager.data                                          train.py:222
 ──────────────────────────────────────────────────────── Config ────────────────────────────────────────────────────────
 TrainerConfig(
     _target=<class 'nerfstudio.engine.trainer.Trainer'>,
     output_dir=PosixPath('outputs'),
-    method_name='nerfacto',
+    method_name='instant-ngp',
     experiment_name=None,
-    timestamp='2023-05-17_084907',
+    timestamp='2023-05-17_101130',
     machine=MachineConfig(seed=42, num_gpus=1, num_machines=1, machine_rank=0, dist_url='auto'),
     logging=LoggingConfig(
         relative_log_dir=PosixPath('.'),
@@ -84,35 +91,35 @@ TrainerConfig(
         websocket_port=7007,
         websocket_port_default=7007,
         websocket_host='0.0.0.0',
-        num_rays_per_chunk=32768,
+        num_rays_per_chunk=4096,
         max_num_display_images=512,
         quit_on_train_completion=False,
         image_format='jpeg',
         jpeg_quality=90
     ),
-    pipeline=VanillaPipelineConfig(
-        _target=<class 'nerfstudio.pipelines.base_pipeline.VanillaPipeline'>,
+    pipeline=DynamicBatchPipelineConfig(
+        _target=<class 'nerfstudio.pipelines.dynamic_batch.DynamicBatchPipeline'>,
         datamanager=VanillaDataManagerConfig(
             _target=<class 'nerfstudio.data.datamanagers.base_datamanager.VanillaDataManager'>,
-            data=PosixPath('/workspace/data/insta360/processed_images'),
+            data=PosixPath('/workspace/data/insta360/v7/processed_images2'),
             camera_optimizer=CameraOptimizerConfig(
                 _target=<class 'nerfstudio.cameras.camera_optimizers.CameraOptimizer'>,
-                mode='SO3xR3',
+                mode='off',
                 position_noise_std=0.0,
                 orientation_noise_std=0.0,
                 optimizer=AdamOptimizerConfig(
                     _target=<class 'torch.optim.adam.Adam'>,
                     lr=0.0006,
-                    eps=1e-08,
+                    eps=1e-15,
                     max_norm=None,
-                    weight_decay=0.01
+                    weight_decay=0
                 ),
                 scheduler=ExponentialDecaySchedulerConfig(
                     _target=<class 'nerfstudio.engine.schedulers.ExponentialDecayScheduler'>,
                     lr_pre_warmup=1e-08,
-                    lr_final=6e-06,
+                    lr_final=None,
                     warmup_steps=0,
-                    max_steps=200000,
+                    max_steps=10000,
                     ramp='cosine'
                 ),
                 param_group='camera_opt'
@@ -139,63 +146,29 @@ TrainerConfig(
             camera_res_scale_factor=1.0,
             patch_size=1
         ),
-        model=NerfactoModelConfig(
-            _target=<class 'nerfstudio.models.nerfacto.NerfactoModel'>,
-            enable_collider=True,
-            collider_params={'near_plane': 2.0, 'far_plane': 6.0},
+        model=InstantNGPModelConfig(
+            _target=<class 'nerfstudio.models.instant_ngp.NGPModel'>,
+            enable_collider=False,
+            collider_params=None,
             loss_coefficients={'rgb_loss_coarse': 1.0, 'rgb_loss_fine': 1.0},
-            eval_num_rays_per_chunk=32768,
-            near_plane=0.05,
-            far_plane=1000.0,
-            background_color='last_sample',
-            hidden_dim=64,
-            hidden_dim_color=64,
-            hidden_dim_transient=64,
-            num_levels=16,
+            eval_num_rays_per_chunk=8192,
+            grid_resolution=128,
+            grid_levels=4,
             max_res=2048,
             log2_hashmap_size=19,
-            num_proposal_samples_per_ray=(256, 96),
-            num_nerf_samples_per_ray=48,
-            proposal_update_every=5,
-            proposal_warmup=5000,
-            num_proposal_iterations=2,
-            use_same_proposal_network=False,
-            proposal_net_args_list=[
-                {'hidden_dim': 16, 'log2_hashmap_size': 17, 'num_levels': 5, 'max_res': 128, 'use_linear': False},
-                {'hidden_dim': 16, 'log2_hashmap_size': 17, 'num_levels': 5, 'max_res': 256, 'use_linear': False}
-            ],
-            proposal_initial_sampler='piecewise',
-            interlevel_loss_mult=1.0,
-            distortion_loss_mult=0.002,
-            orientation_loss_mult=0.0001,
-            pred_normal_loss_mult=0.001,
-            use_proposal_weight_anneal=True,
-            use_average_appearance_embedding=True,
-            proposal_weights_anneal_slope=10.0,
-            proposal_weights_anneal_max_num_iters=1000,
-            use_single_jitter=True,
-            predict_normals=False,
+            alpha_thre=0.01,
+            cone_angle=0.004,
+            render_step_size=None,
+            near_plane=0.05,
+            far_plane=1000.0,
+            use_appearance_embedding=False,
+            background_color='random',
             disable_scene_contraction=False
-        )
+        ),
+        target_num_samples=262144,
+        max_num_samples_per_ray=1024
     ),
     optimizers={
-        'proposal_networks': {
-            'optimizer': AdamOptimizerConfig(
-                _target=<class 'torch.optim.adam.Adam'>,
-                lr=0.01,
-                eps=1e-15,
-                max_norm=None,
-                weight_decay=0
-            ),
-            'scheduler': ExponentialDecaySchedulerConfig(
-                _target=<class 'nerfstudio.engine.schedulers.ExponentialDecayScheduler'>,
-                lr_pre_warmup=1e-08,
-                lr_final=0.0001,
-                warmup_steps=0,
-                max_steps=200000,
-                ramp='cosine'
-            )
-        },
         'fields': {
             'optimizer': AdamOptimizerConfig(
                 _target=<class 'torch.optim.adam.Adam'>,
@@ -215,7 +188,7 @@ TrainerConfig(
         }
     },
     vis='viewer',
-    data=PosixPath('/workspace/data/insta360/processed_images'),
+    data=PosixPath('/workspace/data/insta360/v7/processed_images2'),
     relative_model_dir=PosixPath('nerfstudio_models'),
     steps_per_save=2000,
     steps_per_eval_batch=500,
@@ -231,16 +204,16 @@ TrainerConfig(
     log_gradients=False
 )
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-[08:49:07] Saving config to: outputs/processed_images/nerfacto/2023-05-17_084907/config.yml     experiment_config.py:129
-[08:49:07] Saving checkpoints to: outputs/processed_images/nerfacto/2023-05-17_084907/nerfstudio_models   trainer.py:139
-[08:49:07] Auto image downscale factor of 1                                                 nerfstudio_dataparser.py:339
+[10:11:30] Saving config to: outputs/processed_images2/instant-ngp/2023-05-17_101130/config.yml experiment_config.py:129
+[10:11:30] Saving checkpoints to:                                                                         trainer.py:139
+           outputs/processed_images2/instant-ngp/2023-05-17_101130/nerfstudio_models
+[10:11:30] Auto image downscale factor of 1                                                 nerfstudio_dataparser.py:339
            Skipping 0 files in dataset split train.                                         nerfstudio_dataparser.py:167
            Skipping 0 files in dataset split val.                                           nerfstudio_dataparser.py:167
 Setting up training dataset...
-Caching all 3635 images.
-Warning: If you run out of memory, try reducing the number of images to sample from.
+Caching all 62 images.
 Setting up evaluation dataset...
-Caching all 403 images.
+Caching all 6 images.
 ╭─────────────────────────────────────────── Viewer ───────────────────────────────────────────╮
 │        ╷                                                                                     │
 │   HTTP │ https://viewer.nerf.studio/versions/23-05-01-0/?websocket_url=ws://localhost:7007   │
@@ -252,22 +225,23 @@ No checkpoints to load, training from scratch
 Disabled tensorboard/wandb event writers
 /home/user/.local/lib/python3.10/site-packages/torch/optim/lr_scheduler.py:138: UserWarning: Detected call of `lr_scheduler.step()` before `optimizer.step()`. In PyTorch 1.1.0 and later, you should call them in the opposite order: `optimizer.step()` before `lr_scheduler.step()`.  Failure to do this will result in PyTorch skipping the first value of the learning rate schedule. See more details at https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate
   warnings.warn("Detected call of `lr_scheduler.step()` before `optimizer.step()`. "
-[08:49:17] Printing max of 10 lines. Set flag --logging.local-writer.max-log-size=0 to disable line        writer.py:393
+[10:11:35] Printing max of 10 lines. Set flag --logging.local-writer.max-log-size=0 to disable line        writer.py:393
            wrapping.
-Step (% Done)       Train Iter (time)    ETA (time)           Train Rays / Sec
------------------------------------------------------------------------------------
-210 (0.70%)         20.180 ms            10 m, 1 s            212.04 K
-220 (0.73%)         20.142 ms            9 m, 59 s            212.30 K
-230 (0.77%)         20.135 ms            9 m, 59 s            212.53 K
-240 (0.80%)         20.121 ms            9 m, 58 s            212.60 K
-250 (0.83%)         20.094 ms            9 m, 57 s            212.75 K
-260 (0.87%)         20.109 ms            9 m, 58 s            212.80 K
-270 (0.90%)         20.116 ms            9 m, 58 s            212.66 K
-280 (0.93%)         20.081 ms            9 m, 56 s            212.94 K
-290 (0.97%)         20.067 ms            9 m, 56 s            213.31 K
-300 (1.00%)         20.078 ms            9 m, 56 s            213.04 K
+Step (% Done)       Vis Rays / Sec       Train Iter (time)    ETA (time)           Train Rays / Sec
+--------------------------------------------------------------------------------------------------------
+450 (1.50%)         20.050 ms            9 m, 52 s            224.00 K
+460 (1.53%)         18.313 ms            9 m, 0 s             239.66 K
+470 (1.57%)         18.235 ms            8 m, 58 s            240.23 K
+480 (1.60%)         20.577 ms            10 m, 7 s            218.10 K
+490 (1.63%)         20.825 ms            10 m, 14 s           213.87 K
+500 (1.67%)         18.258 ms            8 m, 58 s            241.30 K
+510 (1.70%)         16.758 ms            8 m, 14 s            256.41 K
+520 (1.73%)         18.880 ms            9 m, 16 s            234.55 K
+530 (1.77%)         20.921 ms            10 m, 16 s           220.49 K
+531 (1.77%)         396.84 K             21.255 ms            10 m, 26 s           216.20 K
 ----------------------------------------------------------------------------------------------------
 Viewer at: https://viewer.nerf.studio/versions/23-05-01-0/?websocket_url=ws://localhost:7007
+
 
 ```
 
